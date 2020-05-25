@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.greenever</groupId>
+    <artifactId>scif-spring-cloud-api</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <!--
+         此包最好不要有parent，且依赖尽量少，  原因是API接口是给其他服务引用的，如果依赖过多或者混乱会对引入方造成困扰。所以定了以下的原则：
+         1. API的pom文件不能有自定义的父pom
+         2. 依赖尽量减少到最少。 例如：需要用netty时无需引入 netty-all， 而是引入需要用到的模块， 如netty-buffer等
+         3. 依赖必须使用 <optional>true</optional>， 这样做的好处是防止和引入方的版本号有冲突
+         -->
+    <properties>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <scif-dependencies.version>1.0.1-SNAPSHOT</scif-dependencies.version>
+
+        <!-- 插件版本  -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.test.skip>true</maven.test.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <surefire.version>2.19.1</surefire.version>
+        <compiler.plugin.version>3.6.1</compiler.plugin.version>
+        <assembly.plugin.version>3.1.0</assembly.plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.greenever</groupId>
+                <artifactId>scif-dependencies</artifactId>
+                <version>${scif-dependencies.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- scif -->
+        <dependency>
+            <groupId>com.greenever</groupId>
+            <artifactId>scif-feign-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.greenever</groupId>
+            <artifactId>scif-common</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Feign client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Fast json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Hibernate validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- maven compiler-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+
+            <!-- maven surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+
+            <!-- maven source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <uniqueVersion>true</uniqueVersion>
+            <name>Release Repository</name>
+            <url>https://repo.rdc.aliyun.com/repository/126827-release-fTfR4R/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <uniqueVersion>true</uniqueVersion>
+            <name>Snapshot Repository</name>
+            <url>https://repo.rdc.aliyun.com/repository/126827-snapshot-syDNQV/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

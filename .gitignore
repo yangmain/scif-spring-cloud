@@ -1,0 +1,65 @@
+# Eclipse project files
+.project
+.classpath
+.settings
+
+# Maven ignore
+target/
+*.jar
+!.mvn/wrapper/*
+*.war
+*.zip
+*.tar
+*.tar.gz
+
+# IntelliJ IDEA project files and directories
+*.iml
+*.ipr
+*.iws
+.idea/
+pid
+
+# Geany project file
+.geany
+
+# KDevelop project file and directory
+.kdev4/
+*.kdev4
+
+# Build targets
+/target
+target
+
+# Report directories
+/reports
+*/reports
+
+# Mac-specific directory that no other operating system needs.
+.DS_Store
+Thumbs.db
+*.orig
+
+# JVM crash logs
+hs_err_pid*.log
+
+dependency-reduced-pom.xml
+
+*/.unison.*
+
+# exclude mainframer files
+mainframer
+.mainframer
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# dubbo
+*.cache
+logs/*
+*.log.gz
+
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greenever.payment.mapper.AreaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.greenever.payment.po.Area">
+        <id column="area_id" property="areaId" />
+        <result column="area_code" property="areaCode" />
+        <result column="p_area_id" property="pAreaId" />
+        <result column="area_level" property="areaLevel" />
+        <result column="area_name_hans" property="areaNameHans" />
+        <result column="area_name_hant" property="areaNameHant" />
+        <result column="area_name_en" property="areaNameEn" />
+        <result column="path" property="path" />
+        <result column="sort_no" property="sortNo" />
+        <result column="record_status" property="recordStatus" />
+        <result column="lock_version" property="lockVersion" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_id, area_code, p_area_id, area_level, area_name_hans, area_name_hant, area_name_en, path, sort_no, record_status, lock_version, create_time, update_time
+    </sql>
+
+</mapper>

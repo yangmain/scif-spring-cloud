@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.greenever</groupId>
+    <artifactId>scif-spring-cloud</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>scif-spring-cloud-services</module>
+        <module>scif-spring-cloud-model</module>
+        <module>scif-spring-cloud-api</module>
+      <module>test</module>
+  </modules>
+
+    <name>scif-spring-cloud</name>
+
+    <properties>
+        <scif-spring-cloud-services.version>1.0.0-SNAPSHOT</scif-spring-cloud-services.version>
+        <scif-spring-cloud-model.version>1.0.0-SNAPSHOT</scif-spring-cloud-model.version>
+        <scif-spring-cloud-api.version>1.0.0-SNAPSHOT</scif-spring-cloud-api.version>
+        <aliyun.gateway.sdk.core.version>1.0.4</aliyun.gateway.sdk.core.version>
+        <scif-dependencies.version>1.0.2-SNAPSHOT</scif-dependencies.version>
+
+        <!-- ²å¼þ°æ±¾  -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.test.skip>true</maven.test.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <surefire.version>2.19.1</surefire.version>
+        <compiler.plugin.version>3.6.1</compiler.plugin.version>
+        <assembly.plugin.version>3.1.0</assembly.plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <spring-boot-maven-plugin.version>2.1.0.RELEASE</spring-boot-maven-plugin.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.greenever</groupId>
+                <artifactId>scif-dependencies</artifactId>
+                <version>${scif-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.greenever</groupId>
+                <artifactId>scif-spring-cloud-model</artifactId>
+                <version>${scif-spring-cloud-model.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.greenever</groupId>
+                <artifactId>scif-spring-cloud-api</artifactId>
+                <version>${scif-spring-cloud-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.greenever</groupId>
+                <artifactId>scif-spring-cloud-service</artifactId>
+                <version>${scif-spring-cloud-services.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.aliyun.api.gateway</groupId>
+                <artifactId>sdk-core-java</artifactId>
+                <version>${aliyun.gateway.sdk.core.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- maven compiler-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.plugin.version}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <compilerVersion>${maven.compiler.source}</compilerVersion>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+
+                <!-- maven assembly -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.plugin.version}</version>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>src/main/assembly/assembly.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- maven source -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- JAR file -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-maven-plugin.version}</version>
+                </plugin>
+
+            </plugins>
+
+        </pluginManagement>
+    </build>
+
+</project>

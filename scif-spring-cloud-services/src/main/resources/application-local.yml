@@ -1,0 +1,106 @@
+# Eureka注册中心地址
+eureka:
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone:  http://127.0.0.1:9999/eureka/
+
+# 全局服务请求的连接超时 读超时时间
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
+
+# 局部服务请求时间
+bss-service:
+  ribbon:
+    # 请求连接的超时时间
+    ConnectTimeout: 30000
+    # 请求处理的超时时间
+    ReadTimeout: 30000
+
+mybatis-plus:
+  # 下划线转换成驼峰型
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 自定义分页设置
+  pagination:
+    # 0 - 仅支持下拉分页模式 ， 1 - 支持传统分页模式，可跳转页码 ， 2 - 两种都支持 ，  默认是0
+    mode: 2
+    # 方言
+    dialectType: mysql
+  mapper-locations: classpath*:/mappers/*.xml
+  global-config:
+    db-config:
+      logic-delete-value: "0"
+      logic-not-delete-value: "1"
+      field-strategy: not_empty
+  integration:
+    mode: default
+
+spring:
+  # 数据库
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://eureka1.greenever.com:3306/account?connectTimeout=10000&amp;autoReconnect=true&amp;allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true
+    username: root
+    password: Hx20@Mysql20cq
+    initialSize: 2
+    minIdle: 5
+    maxActive: 20
+    # 等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，MS
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 60000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,slf4j
+    # 慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+  #  Log AOP配置
+  controller:
+    log:
+      # 当遇到未知错误时，返回给客户端的错误码， 错误信息定义在errCodeDefClass中
+      errUnknownCode: 1005000
+      errParamCode: 1005001
+      errCodeDefClass: com.greenever.enums.ErrorCodeEnum
+
+aliyun:
+  market:
+    appKey: 203799404
+    appSecret: iqgjlvkee9rknktp1pdt14is3k1ozwkn
+
+  # Aliyun 文件存储
+  oss:
+    accessKeyId: LTAI4Fs1uNbpUKYt43Uuobtw
+    accessKeySecret: 0WuiWN8NfBAm3NI9FLp6scnya5lG2j
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    endpointInternal: oss-cn-shenzhen-internal.aliyuncs.com # 开发环境需要改成内网地址 本地环境无需用内网地址
+    privateBucket: hxcq-pr
+    publicBucket: hxcq-pb
+    private-base-url: https://hxcq-pr.oss-cn-shenzhen.aliyuncs.com
+
+orika:
+  # 是否启用自动配置
+  enabled: true
+  # 是否映射空值
+  mapNulls: false
+  # 是否使用自动映射
+  useAutoMapping: true
+  # 是否使用内置转换器
+  useBuiltinConverters: true
+  # 在一个异常的发生的同时映射对象
+  dumpStateOnException: false
+
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: debug
+    org.springframework.cloud.sleuth: debug
+    com.greenever.account: info
