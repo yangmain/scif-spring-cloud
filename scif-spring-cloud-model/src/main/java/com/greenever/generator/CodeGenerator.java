@@ -15,15 +15,23 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author cuik
- *
  */
 public class CodeGenerator {
 
-    private final  static String PACKAGE_NAME = "com.greenever";
+
+    private final static String DB_URL = "jdbc:mysql://eureka1.greenever.com:3306/account?useUnicode=true&useSSL=false&characterEncoding=utf8";
+
+    private final static String USER_NAME = "root";
+
+    private final static String PASSWORD = "Hx20@Mysql20cq";
+
+    private final static String PACKAGE_NAME = "com.greenever";
     /**
      * TODO  当前模块名称 需手工修改
      */
@@ -35,7 +43,7 @@ public class CodeGenerator {
     /**
      * 表名，多个表","分割
      */
-    private static String[] tables = {"open_account_online_application","area"};
+    private static String[] tables = {"open_account_online_application"};
 
 
     public static void main(String[] args) {
@@ -44,9 +52,9 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java");
-        gc.setAuthor("Mybatis Plus Generator");
+        String projectPath = System.getProperty("user.dir" );
+        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java" );
+        gc.setAuthor("Mybatis Plus Generator" );
         gc.setOpen(false);
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
@@ -57,56 +65,44 @@ public class CodeGenerator {
         gc.setDateType(DateType.ONLY_DATE);
         mpg.setGlobalConfig(gc);
 
-        // 数据源配置
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://eureka1.greenever.com:3306/account?useUnicode=true&useSSL=false&characterEncoding=utf8");
-        // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("Hx20@Mysql20cq");
-    /*    dsc.setTypeConvert(new MySqlTypeConvert() {
-            @Override
-            public DbColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
-                //自定义类型转换
-                if (fieldType.toLowerCase().contains("datetime")) {
-                    return DbColumnType.DATE;
-                }
-                return (DbColumnType) super.processTypeConvert(globalConfig, fieldType);
-            }
-        });*/
 
-        mpg.setDataSource(dsc);
+        mpg.setDataSource(dataSource());
 
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(MODULE_NAME);
         pc.setParent(PACKAGE_NAME);
-        pc.setEntity("po");
+        pc.setEntity("po" );
         mpg.setPackageInfo(pc);
 
-        // 自定义配置
+        // 自定义配置 模板中使用 ${cfg.typeHandler}
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
-               /* Map<String, Object> map = new HashMap<>();
-                map.put("abc", "cuikang");
-                this.setMap(map);*/
+                Map<String, Object> map = new HashMap<>();
+                map.put("typeHandler", "cuikang" );
+                this.setMap(map);
             }
         };
 
-        // 如果模板引擎是 freemarker
-        String templatePath = "/templates/mapper.xml.ftl";
-        // 如果模板引擎是 velocity
-        // String templatePath = "/customtemplates/mapper.xml.vm";
-
-        // 自定义输出配置
+        String mapperXmlTemplate = "customtemplates/mapper.xml.ftl";
+        //自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
-        // 自定义配置会被优先输出
-        focList.add(new FileOutConfig(templatePath) {
+        //自定义配置会被优先输出
+        focList.add(new FileOutConfig(mapperXmlTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
+                tableInfo.setImportPackages("com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler" );
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                 return projectPath + "/" + PROJECT_NAME + "/src/main/resources/mappers/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+            }
+        });
+        String daoTemplate = "customtemplates/dao.java.ftl";
+        focList.add(new FileOutConfig(daoTemplate) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+//                return projectPath + "/" + PROJECT_NAME + "/src/java/com/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
+                return projectPath + "/" + PROJECT_NAME + "/src/java/com/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
             }
         });
         cfg.setFileCreate(new IFileCreate() {
@@ -128,12 +124,48 @@ public class CodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-//         templateConfig.setEntity("customtemplates/entity.java");
-        // templateConfig.setService();
-        // templateConfig.setController();
-
+        templateConfig.setEntity("customtemplates/entity.java" );
+        templateConfig.setService("customtemplates/service.java" );
+        templateConfig.setController("customtemplates/controller.java" );
+        templateConfig.setMapper("customtemplates/mapper.java" );
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
+
+
+        mpg.setStrategy(getStrategy());
+        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+        mpg.execute();
+    }
+
+
+    private static DataSourceConfig dataSource() {
+        // 数据源配置
+        DataSourceConfig dsc = new DataSourceConfig();
+        dsc.setUrl(DB_URL);
+        // dsc.setSchemaName("public");
+        dsc.setDriverName("com.mysql.jdbc.Driver" );
+        dsc.setUsername(USER_NAME);
+        dsc.setPassword(PASSWORD);
+    /*    dsc.setTypeConvert(new MySqlTypeConvert() {
+            @Override
+            public DbColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+                //自定义类型转换
+                if (fieldType.toLowerCase().contains("datetime")) {
+                    return DbColumnType.DATE;
+                }
+                return (DbColumnType) super.processTypeConvert(globalConfig, fieldType);
+            }
+        });*/
+        return dsc;
+    }
+
+
+    /**
+     * 策略配置
+     *
+     * @return StrategyConfig
+     */
+    private static StrategyConfig getStrategy() {
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
@@ -145,16 +177,16 @@ public class CodeGenerator {
         // 公共父类
 //        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
+        strategy.setSuperEntityColumns("id" );
         strategy.setInclude(tables);
         strategy.setControllerMappingHyphenStyle(true);
         //是否生成实体时，生成字段注解@TableField
 //        strategy.setEntityTableFieldAnnotationEnable(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+//        strategy.setTablePrefix(pc.getModuleName() + "_" );
         //乐观锁属性名称
-        strategy.setVersionFieldName("lock_version");
+        strategy.setVersionFieldName("lock_version" );
         //逻辑删除属性名称
-        strategy.setLogicDeleteFieldName("record_status");
+        strategy.setLogicDeleteFieldName("record_status" );
         //表填充字段
         List<TableFill> tableFills = new ArrayList<>();
         tableFills.add(new TableFill("record_status", FieldFill.INSERT));
@@ -162,9 +194,8 @@ public class CodeGenerator {
         tableFills.add(new TableFill("create_time", FieldFill.INSERT));
         tableFills.add(new TableFill("update_time", FieldFill.INSERT_UPDATE));
         strategy.setTableFillList(tableFills);
-        mpg.setStrategy(strategy);
-        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
-        mpg.execute();
+
+        return strategy;
     }
 
 }

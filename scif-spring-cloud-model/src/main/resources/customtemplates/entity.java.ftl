@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 </#if>
 <#if table.convert>
-@TableName("${table.name}")
+    @TableName("${table.name}")
 </#if>
 <#if swagger2>
 @ApiModel(value="${entity}对象", description="${table.comment!}")
@@ -79,6 +79,8 @@ public class ${entity} implements Serializable {
         <#else>
     @TableField(fill = FieldFill.${field.fill})
         </#if>
+    <#elseif field.type == "json">
+    @TableField(value = "${field.name}", typeHandler = FastjsonTypeHandler.class)
     <#elseif field.convert>
     @TableField("${field.name}")
     </#if>
