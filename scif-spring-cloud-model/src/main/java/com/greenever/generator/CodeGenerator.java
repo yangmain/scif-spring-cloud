@@ -102,7 +102,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
 //                return projectPath + "/" + PROJECT_NAME + "/src/java/com/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
-                return projectPath + "/" + PROJECT_NAME + "/src/java/com/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
+                return projectPath + "/" + PROJECT_NAME +"/src/main/java/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
             }
         });
         cfg.setFileCreate(new IFileCreate() {

@@ -1,6 +1,6 @@
-package ${package}.dao;
 
-import ${package.Entity}.${entity};
+
+import ${package.Mapper}.${table.mapperName};
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 
@@ -16,7 +16,8 @@ import javax.annotation.Resource;
 public class ${entity}Dao {
 
     @Resource
-    private ${table.mapperName} areaMapper;
+    private ${table.mapperName} ${table.entityPath}Mapper;
+
 }
 
 
