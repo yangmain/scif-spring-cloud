@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.FileType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
@@ -24,61 +26,89 @@ import java.util.Map;
  */
 public class CodeGenerator {
 
+    //表名，多个表","分割
+    private static String[] tables = {"open_account_online_application"};
+    private final static String PACKAGE_NAME = "com.greenever";
+    //当前模块名称
+    private final static String MODULE_NAME = "payment";
+    //Model项目名称
+    private static String PROJECT_NAME = "scif-spring-cloud-model";
+
+
     //数据源配置
     private final static String DB_URL = "jdbc:mysql://eureka1.greenever.com:3306/account?useUnicode=true&useSSL=false&characterEncoding=utf8";
     private final static String USER_NAME = "root";
     private final static String PASSWORD = "Hx20@Mysql20cq";
 
-    private final static String PACKAGE_NAME = "com.greenever";
+    private static String projectPath = System.getProperty("user.dir");
+
+
     /**
-     * TODO  当前模块名称 需手工修改
+     * 执行方法生成代码
      */
-    private final static String MODULE_NAME = "payment";
-    /**
-     * TODO  当前模块名称 需手工修改
-     */
-    private static String PROJECT_NAME = "scif-spring-cloud-model";
-
-    //表名，多个表","分割
-    private static String[] tables = {"open_account_online_application"};
-
-    private static String daoOutPutPath;
-
     public static void main(String[] args) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
-
-        // 全局配置
-        GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java");
-        gc.setAuthor("Mybatis Plus Generator");
-        gc.setOpen(false);
-        gc.setBaseColumnList(true);
-        gc.setBaseResultMap(true);
-        //文件覆盖
-        gc.setFileOverride(true);
-        //实体属性 Swagger2 注解
-        gc.setSwagger2(true);
-        gc.setDateType(DateType.ONLY_DATE);
-        mpg.setGlobalConfig(gc);
-
-
+        //全局配置
+        mpg.setGlobalConfig(globalConfig());
+        //数据源配置
         mpg.setDataSource(dataSource());
+        //包配置
+        mpg.setPackageInfo(packageConfig());
+        //自定义配置
+        mpg.setCfg(custom());
+        //指定模板
+        mpg.setTemplate(templateConfig());
+        //策略配置
+        mpg.setStrategy(getStrategy());
+        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+        mpg.execute();
+    }
 
+
+    /**
+     * 指定模板
+     *
+     * @return TemplateConfig
+     */
+    private static TemplateConfig templateConfig() {
+        // 配置模板
+        TemplateConfig templateConfig = new TemplateConfig();
+        // 配置自定义输出模板
+        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        templateConfig.setService(null);
+        templateConfig.setServiceImpl(null);
+        templateConfig.setController(null);
+        templateConfig.setEntity("customtemplates/entity.java");
+        templateConfig.setMapper("customtemplates/mapper.java");
+        templateConfig.setXml(null);
+        return templateConfig;
+    }
+
+    /**
+     * 包配置
+     *
+     * @return PackageConfig
+     */
+    private static PackageConfig packageConfig() {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(MODULE_NAME);
         pc.setParent(PACKAGE_NAME);
         pc.setEntity("po");
-        mpg.setPackageInfo(pc);
+        return pc;
+    }
 
+    /**
+     * 自定义配置
+     */
+    private static InjectionConfig custom() {
         // 自定义配置 模板中使用 ${cfg.typeHandler}
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("packageDao", PACKAGE_NAME+"."+MODULE_NAME+".dao");
+                map.put("packageDao", PACKAGE_NAME + "." + MODULE_NAME + ".dao");
                 this.setMap(map);
             }
         };
@@ -108,8 +138,7 @@ public class CodeGenerator {
                 if (fileType == FileType.ENTITY) {
                     // 已经生成 mapper 文件判断存在，不想重新生成返回 false
                     return true;
-                }
-                else if (fileType == FileType.OTHER) {
+                } else if (fileType == FileType.OTHER) {
                     checkDir(filePath);
                 }
                 // 允许生成模板文件
@@ -117,25 +146,31 @@ public class CodeGenerator {
             }
         });
         cfg.setFileOutConfigList(focList);
-        mpg.setCfg(cfg);
 
-        // 配置模板
-        TemplateConfig templateConfig = new TemplateConfig();
-
-        // 配置自定义输出模板
-        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        templateConfig.setService(null);
-        templateConfig.setServiceImpl(null);
-        templateConfig.setController(null);
-        templateConfig.setEntity("customtemplates/entity.java");
-        templateConfig.setMapper("customtemplates/mapper.java");
-        templateConfig.setXml(null);
-        mpg.setTemplate(templateConfig);
+        return cfg;
+    }
 
 
-        mpg.setStrategy(getStrategy());
-        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
-        mpg.execute();
+    /**
+     * 全局配置
+     *
+     * @return GlobalConfig
+     */
+    private static GlobalConfig globalConfig() {
+        // 全局配置
+        GlobalConfig gc = new GlobalConfig();
+
+        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java");
+        gc.setAuthor("Mybatis Plus Generator");
+        gc.setOpen(false);
+        gc.setBaseColumnList(true);
+        gc.setBaseResultMap(true);
+        //文件覆盖
+        gc.setFileOverride(true);
+        //实体属性 Swagger2 注解
+        gc.setSwagger2(true);
+        gc.setDateType(DateType.ONLY_DATE);
+        return gc;
     }
 
 
@@ -143,20 +178,19 @@ public class CodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(DB_URL);
-        // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername(USER_NAME);
         dsc.setPassword(PASSWORD);
-    /*    dsc.setTypeConvert(new MySqlTypeConvert() {
+        dsc.setTypeConvert(new MySqlTypeConvert() {
             @Override
             public DbColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
                 //自定义类型转换
-                if (fieldType.toLowerCase().contains("datetime")) {
+                /*if (fieldType.toLowerCase().contains("datetime")) {
                     return DbColumnType.DATE;
-                }
+                }*/
                 return (DbColumnType) super.processTypeConvert(globalConfig, fieldType);
             }
-        });*/
+        });
         return dsc;
     }
 
