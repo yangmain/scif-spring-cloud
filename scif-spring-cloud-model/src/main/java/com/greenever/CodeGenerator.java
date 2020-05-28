@@ -1,4 +1,4 @@
-package com.greenever.generator;
+package com.greenever;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -24,11 +24,9 @@ import java.util.Map;
  */
 public class CodeGenerator {
 
-
+    //数据源配置
     private final static String DB_URL = "jdbc:mysql://eureka1.greenever.com:3306/account?useUnicode=true&useSSL=false&characterEncoding=utf8";
-
     private final static String USER_NAME = "root";
-
     private final static String PASSWORD = "Hx20@Mysql20cq";
 
     private final static String PACKAGE_NAME = "com.greenever";
@@ -40,11 +38,11 @@ public class CodeGenerator {
      * TODO  当前模块名称 需手工修改
      */
     private static String PROJECT_NAME = "scif-spring-cloud-model";
-    /**
-     * 表名，多个表","分割
-     */
+
+    //表名，多个表","分割
     private static String[] tables = {"open_account_online_application"};
 
+    private static String daoOutPutPath;
 
     public static void main(String[] args) {
         // 代码生成器
@@ -52,9 +50,9 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir" );
-        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java" );
-        gc.setAuthor("Mybatis Plus Generator" );
+        String projectPath = System.getProperty("user.dir");
+        gc.setOutputDir(projectPath + "/" + PROJECT_NAME + "/src/main/java");
+        gc.setAuthor("Mybatis Plus Generator");
         gc.setOpen(false);
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
@@ -72,7 +70,7 @@ public class CodeGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(MODULE_NAME);
         pc.setParent(PACKAGE_NAME);
-        pc.setEntity("po" );
+        pc.setEntity("po");
         mpg.setPackageInfo(pc);
 
         // 自定义配置 模板中使用 ${cfg.typeHandler}
@@ -80,7 +78,7 @@ public class CodeGenerator {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("typeHandler", "cuikang" );
+                map.put("packageDao", PACKAGE_NAME+"."+MODULE_NAME+".dao");
                 this.setMap(map);
             }
         };
@@ -92,7 +90,7 @@ public class CodeGenerator {
         focList.add(new FileOutConfig(mapperXmlTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                tableInfo.setImportPackages("com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler" );
+                tableInfo.setImportPackages("com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler");
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                 return projectPath + "/" + PROJECT_NAME + "/src/main/resources/mappers/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
@@ -101,8 +99,7 @@ public class CodeGenerator {
         focList.add(new FileOutConfig(daoTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-//                return projectPath + "/" + PROJECT_NAME + "/src/java/com/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
-                return projectPath + "/" + PROJECT_NAME +"/src/main/java/" + tableInfo.getEntityName() + "Dao"+ StringPool.DOT_JAVA;
+                return projectPath + "/" + PROJECT_NAME + "/src/main/java/com/greenever/" + MODULE_NAME + "/dao/" + tableInfo.getEntityName() + "Dao" + StringPool.DOT_JAVA;
             }
         });
         cfg.setFileCreate(new IFileCreate() {
@@ -111,6 +108,9 @@ public class CodeGenerator {
                 if (fileType == FileType.ENTITY) {
                     // 已经生成 mapper 文件判断存在，不想重新生成返回 false
                     return true;
+                }
+                else if (fileType == FileType.OTHER) {
+                    checkDir(filePath);
                 }
                 // 允许生成模板文件
                 return !new File(filePath).exists();
@@ -124,10 +124,11 @@ public class CodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        templateConfig.setEntity("customtemplates/entity.java" );
-        templateConfig.setService("customtemplates/service.java" );
-        templateConfig.setController("customtemplates/controller.java" );
-        templateConfig.setMapper("customtemplates/mapper.java" );
+        templateConfig.setService(null);
+        templateConfig.setServiceImpl(null);
+        templateConfig.setController(null);
+        templateConfig.setEntity("customtemplates/entity.java");
+        templateConfig.setMapper("customtemplates/mapper.java");
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
 
@@ -143,7 +144,7 @@ public class CodeGenerator {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(DB_URL);
         // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.jdbc.Driver" );
+        dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername(USER_NAME);
         dsc.setPassword(PASSWORD);
     /*    dsc.setTypeConvert(new MySqlTypeConvert() {
@@ -177,16 +178,16 @@ public class CodeGenerator {
         // 公共父类
 //        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id" );
+        strategy.setSuperEntityColumns("id");
         strategy.setInclude(tables);
         strategy.setControllerMappingHyphenStyle(true);
         //是否生成实体时，生成字段注解@TableField
 //        strategy.setEntityTableFieldAnnotationEnable(true);
 //        strategy.setTablePrefix(pc.getModuleName() + "_" );
         //乐观锁属性名称
-        strategy.setVersionFieldName("lock_version" );
+        strategy.setVersionFieldName("lock_version");
         //逻辑删除属性名称
-        strategy.setLogicDeleteFieldName("record_status" );
+        strategy.setLogicDeleteFieldName("record_status");
         //表填充字段
         List<TableFill> tableFills = new ArrayList<>();
         tableFills.add(new TableFill("record_status", FieldFill.INSERT));
@@ -197,5 +198,6 @@ public class CodeGenerator {
 
         return strategy;
     }
+
 
 }

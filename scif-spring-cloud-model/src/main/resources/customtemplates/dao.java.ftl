@@ -1,4 +1,4 @@
-
+package ${cfg.packageDao};
 
 import ${package.Mapper}.${table.mapperName};
 import org.springframework.stereotype.Repository;
