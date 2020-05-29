@@ -1,4 +1,4 @@
-package com.greenever.enums;
+package com.greenever.archetype.enums;
 
 import com.greenever.base.common.base.ErrorCode;
 import com.greenever.base.common.base.IErrorCode;

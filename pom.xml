@@ -10,19 +10,18 @@
         <module>scif-spring-cloud-services</module>
         <module>scif-spring-cloud-model</module>
         <module>scif-spring-cloud-api</module>
-      <module>test</module>
   </modules>
 
     <name>scif-spring-cloud</name>
 
     <properties>
-        <scif-spring-cloud-services.version>1.0.0-SNAPSHOT</scif-spring-cloud-services.version>
+       <!-- <scif-spring-cloud-services.version>1.0.0-SNAPSHOT</scif-spring-cloud-services.version>
         <scif-spring-cloud-model.version>1.0.0-SNAPSHOT</scif-spring-cloud-model.version>
-        <scif-spring-cloud-api.version>1.0.0-SNAPSHOT</scif-spring-cloud-api.version>
+        <scif-spring-cloud-api.version>1.0.0-SNAPSHOT</scif-spring-cloud-api.version>-->
         <aliyun.gateway.sdk.core.version>1.0.4</aliyun.gateway.sdk.core.version>
         <scif-dependencies.version>1.0.2-SNAPSHOT</scif-dependencies.version>
 
-        <!-- ²å¼þ°æ±¾  -->
+        <!-- ï¿½ï¿½ï¿½ï¿½æ±¾  -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -52,19 +51,19 @@
             <dependency>
                 <groupId>com.greenever</groupId>
                 <artifactId>scif-spring-cloud-model</artifactId>
-                <version>${scif-spring-cloud-model.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.greenever</groupId>
                 <artifactId>scif-spring-cloud-api</artifactId>
-                <version>${scif-spring-cloud-api.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.greenever</groupId>
                 <artifactId>scif-spring-cloud-service</artifactId>
-                <version>${scif-spring-cloud-services.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
 

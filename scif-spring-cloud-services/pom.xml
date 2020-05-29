@@ -27,12 +27,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- scif -->
-        <dependency>
-            <groupId>com.greenever</groupId>
-            <artifactId>scif-common</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.greenever</groupId>
             <artifactId>scif-feign-starter</artifactId>
@@ -41,11 +35,6 @@
         <dependency>
             <groupId>com.greenever</groupId>
             <artifactId>scif-validation-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.greenever</groupId>
-            <artifactId>scif-oss-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -63,25 +52,18 @@
             <artifactId>scif-spring-cloud-model</artifactId>
         </dependency>
 
-
         <!-- MyBatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Druid data source -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
 
-        <!-- Eureka -->
-       <!-- <dependency>
+         <!--Eureka-->
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
--->
 
         <!-- Openfeign client -->
         <dependency>
@@ -112,31 +94,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
-
-
-        <!-- aliyun oss sdk -->
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-        </dependency>
-
-        <!-- Sleuth -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.projectreactor</groupId>
-                    <artifactId>reactor-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-core</artifactId>
-        </dependency>
-
 
         <!-- Lombok -->
         <dependency>

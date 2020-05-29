@@ -1,6 +1,6 @@
 #Apollo 配置
 app:
-  id: 10002                            #应用ID
+  id: 10077                            #应用ID
 apollo:
   cacheDir: /opt/data/                       #配置本地配置缓存目录
   cluster: default                           #指定使用哪个集群的配置

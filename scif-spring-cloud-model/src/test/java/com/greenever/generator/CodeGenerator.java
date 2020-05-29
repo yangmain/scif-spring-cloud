@@ -1,6 +1,7 @@
-package com.greenever;
+package com.greenever.generator;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
@@ -27,10 +28,10 @@ import java.util.Map;
 public class CodeGenerator {
 
     //表名，多个表","分割
-    private static String[] tables = {"open_account_online_application"};
+    private static String[] tables = {"open_account_online_application","area"};
     private final static String PACKAGE_NAME = "com.greenever";
     //当前模块名称
-    private final static String MODULE_NAME = "payment";
+    private final static String MODULE_NAME = "archetype";
     //Model项目名称
     private static String PROJECT_NAME = "scif-spring-cloud-model";
 
@@ -41,7 +42,6 @@ public class CodeGenerator {
     private final static String PASSWORD = "Hx20@Mysql20cq";
 
     private static String projectPath = System.getProperty("user.dir");
-
 
     /**
      * 执行方法生成代码
@@ -132,7 +132,8 @@ public class CodeGenerator {
                 return projectPath + "/" + PROJECT_NAME + "/src/main/java/com/greenever/" + MODULE_NAME + "/dao/" + tableInfo.getEntityName() + "Dao" + StringPool.DOT_JAVA;
             }
         });
-        cfg.setFileCreate(new IFileCreate() {
+        //文件覆盖自定义
+        /*cfg.setFileCreate(new IFileCreate() {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 if (fileType == FileType.ENTITY) {
@@ -144,7 +145,7 @@ public class CodeGenerator {
                 // 允许生成模板文件
                 return !new File(filePath).exists();
             }
-        });
+        });*/
         cfg.setFileOutConfigList(focList);
 
         return cfg;
@@ -166,10 +167,11 @@ public class CodeGenerator {
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
         //文件覆盖
-        gc.setFileOverride(true);
+        gc.setFileOverride(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
         gc.setDateType(DateType.ONLY_DATE);
+        gc.setIdType(IdType.NONE);
         return gc;
     }
 

@@ -10,14 +10,6 @@ ribbon:
   ConnectTimeout: 5000
   ReadTimeout: 5000
 
-# 局部服务请求时间
-bss-service:
-  ribbon:
-    # 请求连接的超时时间
-    ConnectTimeout: 30000
-    # 请求处理的超时时间
-    ReadTimeout: 30000
-
 mybatis-plus:
   # 下划线转换成驼峰型
   configuration:
@@ -69,22 +61,7 @@ spring:
       # 当遇到未知错误时，返回给客户端的错误码， 错误信息定义在errCodeDefClass中
       errUnknownCode: 1005000
       errParamCode: 1005001
-      errCodeDefClass: com.greenever.enums.ErrorCodeEnum
-
-aliyun:
-  market:
-    appKey: 203799404
-    appSecret: iqgjlvkee9rknktp1pdt14is3k1ozwkn
-
-  # Aliyun 文件存储
-  oss:
-    accessKeyId: LTAI4Fs1uNbpUKYt43Uuobtw
-    accessKeySecret: 0WuiWN8NfBAm3NI9FLp6scnya5lG2j
-    endpoint: oss-cn-shenzhen.aliyuncs.com
-    endpointInternal: oss-cn-shenzhen-internal.aliyuncs.com # 开发环境需要改成内网地址 本地环境无需用内网地址
-    privateBucket: hxcq-pr
-    publicBucket: hxcq-pb
-    private-base-url: https://hxcq-pr.oss-cn-shenzhen.aliyuncs.com
+      errCodeDefClass: com.greenever.archetype.enums.ErrorCodeEnum
 
 orika:
   # 是否启用自动配置
@@ -103,4 +80,4 @@ logging:
   level:
     org.springframework.cloud.openfeign: debug
     org.springframework.cloud.sleuth: debug
-    com.greenever.account: info
+    com.greenever: info
